@@ -253,7 +253,7 @@ const FloatAction: React.FC<{
   return (
     <Card className="absolute w-full max-w-md bottom-0 right-0 md:top-20 md:w-fit md:right-20 md:h-fit">
       <CardHeader>
-        <CardTitle>{service?.title}</CardTitle>
+        <CardTitle>{service?.extra_info}</CardTitle>
       </CardHeader>
       <CardContent className="flex justify-center flex-col items-center space-y-3">
         <p className="text-2xl font-semibold">{service?.price}৳</p>

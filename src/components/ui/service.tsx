@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const ServiceSlide: React.FC<IService> = ({ ...props }) => {
   return (
     <a href={`/services/${props.id}`} className="max-w-[250px]">
@@ -8,7 +10,7 @@ export const ServiceSlide: React.FC<IService> = ({ ...props }) => {
         />
       </div>
       <h3 className="text-[18px] font-semibold mt-2 font-Poppins">
-          {props.title.substring(0,50)+"..."}
+        {props.title.substring(0, 50) + "..."}
       </h3>
     </a>
   );
@@ -16,8 +18,8 @@ export const ServiceSlide: React.FC<IService> = ({ ...props }) => {
 
 export const Service: React.FC<IService> = ({ ...props }) => {
   return (
-    <a
-      href={`/services/${props.id}`}
+    <Link
+      to={`/services/${props.id}`}
       className="w-full md:max-w-[250px] flex items-center md:flex-col md:items-start space-x-1 md:space-x-0 "
     >
       <div className="w-full h-[250px] border  border-slate-100 rounded-md">
@@ -27,8 +29,8 @@ export const Service: React.FC<IService> = ({ ...props }) => {
         />
       </div>
       <h3 className="text-sm md:text-[18px] font-semibold md:mt-2 font-Poppins">
-        {props.title.substring(0,50)+"..."}
+        {props.title.substring(0, 50) + "..."}
       </h3>
-    </a>
+    </Link>
   );
 };

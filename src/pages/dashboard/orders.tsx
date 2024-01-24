@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUpdateStatus, useWorkerDialog } from "@/hooks/worker";
+import { cn } from "@/lib/utils";
 import { useAppDispatch, useTypedSelector } from "@/redux";
 import { assignWorker, updateStatus } from "@/redux/actions/order";
 import { PopoverContent } from "@radix-ui/react-popover";
@@ -58,6 +59,22 @@ const column: ColumnDef<IOrder>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell(props) {
+      return (
+        <p
+          className={cn(
+            props.row.original.status === "pending"
+              ? "bg-destructive"
+              : props.row.original.status === "delivered"
+              ? "bg-green-600"
+              : "bg-yellow-700",
+            "py-2 text-center rounded-md capitalize"
+          )}
+        >
+          {props?.row?.original?.status}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "payment",

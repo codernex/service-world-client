@@ -1,10 +1,7 @@
 import Container from "@/components/ui/container";
 import { MapPinIcon, PhoneCall } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
 
 export default function Contact() {
-  const navigate = useNavigate();
   return (
     <Container className="bg-contact-bg-2 py-10 lg:py-32 space-y-8">
       <div className="max-w-3xl mx-auto space-y-6">
@@ -22,20 +19,18 @@ export default function Contact() {
         </h2>
       </div>
       <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row items-center justify-center lg:space-x-6">
-        <Button
-          onClick={() => {
-            navigate("/services");
-          }}
-          className="h-14 w-40"
+        <a
+          className="h-14 w-40 flex items-center bg-primary justify-center rounded-md"
+          href="/services"
         >
           অনলাইনে বুকিং করুন
-        </Button>
-        <Link
-          to="/contact"
+        </a>
+        <a
+          href="/contact"
           className="h-14 w-40 flex items-center bg-slate-50 justify-center rounded-md"
         >
           যোগাযোগ করুন
-        </Link>
+        </a>
       </div>
     </Container>
   );

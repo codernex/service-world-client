@@ -13,6 +13,7 @@ interface IService {
   thumbnail: string;
   category: string;
   reviews: IReview[];
+  extra_info: string;
 }
 enum Payment {
   CASH = "cash",
@@ -25,7 +26,7 @@ interface IOrder {
   amount: number;
   contact_no: string;
   services: IService[];
-  status: string;
+  status: "pending" | "accepted" | "delivered";
   user: IUser;
   assignedWorker: IUser;
   created_at: Date;

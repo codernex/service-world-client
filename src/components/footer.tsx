@@ -1,5 +1,3 @@
-import FooterShape1 from "@/assets/footer_shape_1.png";
-import FooterShape2 from "@/assets/footer_shape_2.png";
 import Logo from "@/assets/logo.png";
 import {
   ChevronRight,
@@ -22,8 +20,8 @@ const workingHours = [
 ];
 export default function Footer() {
   return (
-    <footer className="relative bg-[#161921] h-full">
-      <Container className="py-20 grid grid-cols-1 gap-10 lg:gap-20 lg:grid-cols-2 xl:grid-cols-4">
+    <footer className="relative bg-[#161921]  w-full h-full">
+      <Container className="py-20 pb-0 grid grid-cols-1 gap-10 lg:gap-20 lg:grid-cols-2 xl:grid-cols-4 bg-transparent">
         <div>
           <h2 className="text-slate-50 text-xl font-semibold py-3 border-b border-primary">
             আমাদের সম্পর্কে
@@ -100,13 +98,7 @@ export default function Footer() {
           </ul>
         </div>
       </Container>
-      <img className="absolute h-full top-0 left-0" src={FooterShape1} alt="" />
-      <img
-        className="absolute h-full bottom-0 right-0"
-        src={FooterShape2}
-        alt=""
-      />
-      <Container className="flex justify-center bg-[#2A2F3C]">
+      <div className="flex justify-center bg-[#2A2F3C]">
         <p className="text-white py-10 text-center">
           Copyright &copy; 2023 Service World BD. All Rights Reserved by{" "}
           <Link
@@ -116,7 +108,7 @@ export default function Footer() {
             Service World
           </Link>
         </p>
-      </Container>
+      </div>
     </footer>
   );
 }

@@ -35,7 +35,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { SelectValue } from "@radix-ui/react-select";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon, MoreVertical, Trash2Icon } from "lucide-react";
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
@@ -58,7 +58,9 @@ const column: ColumnDef<IService>[] = [
   {
     accessorKey: "description",
     header: "Description",
-    cell: (props) => <ServiceDescription data={props.row.original.description}/>,
+    cell: (props) => (
+      <ServiceDescription data={props.row.original.description} />
+    ),
   },
   {
     accessorKey: "image",
@@ -77,6 +79,10 @@ const column: ColumnDef<IService>[] = [
     header: "Price(TK)",
   },
   {
+    accessorKey: "extra_info",
+    header: "Extra Info",
+  },
+  {
     accessorKey: "",
     header: "Actions",
     cell: (props) => {
@@ -85,18 +91,16 @@ const column: ColumnDef<IService>[] = [
   },
 ];
 
-const ServiceDescription:React.FC<{data:string}>=({data})=>{
-    const ref=useRef<HTMLDivElement|null>(null)
+const ServiceDescription: React.FC<{ data: string }> = ({ data }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
 
-    useEffect(()=>{
-        if(ref.current){
-            ref.current.innerHTML=data
-        }
-    },[data])
-    return(
-        <div ref={ref}></div>
-    )
-}
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.innerHTML = data;
+    }
+  }, [data]);
+  return <div ref={ref}></div>;
+};
 
 const ServiceAction: React.FC<{ original: IService }> = ({ original }) => {
   const { setOpen } = useServiceModal();
@@ -166,6 +170,9 @@ const createServiceSchema = z.object({
   title: z.string({
     required_error: "Title is required",
   }),
+  extra_info: z.string({
+    required_error: "Extra info is required",
+  }),
 });
 
 const CreateService = React.memo(() => {
@@ -180,6 +187,7 @@ const CreateService = React.memo(() => {
       price: data.price,
       thumbnail: data.thumbnail,
       title: data.title,
+      extra_info: data.extra_info,
     },
   });
   const dispatch = useAppDispatch();
@@ -200,6 +208,7 @@ const CreateService = React.memo(() => {
       price: undefined,
       thumbnail: "",
       title: "",
+      extra_info: "",
     });
 
     setOpen(false, undefined);
@@ -232,130 +241,145 @@ const CreateService = React.memo(() => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={"max-h-screen lg:max-w-screen-lg overflow-y-scroll"}>
+      <DialogContent
+        className={"max-h-screen lg:max-w-screen-lg overflow-y-scroll"}
+      >
         <DialogHeader>
           <DialogTitle>Create Service</DialogTitle>
         </DialogHeader>
 
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
-                    <FormField
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Service Name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="EG: Plumbing" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        control={form.control}
-                        name="name"
-                    />
-                    <FormField
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Service Title</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="EG: Plumbing Repair" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        control={form.control}
-                        name="title"
-                    />
-                    <FormField
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Description</FormLabel>
-                                <FormControl>
-                                    <ReactQuill theme="snow" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        control={form.control}
-                        name="description"
-                    />
-                    <FormField
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Price</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="120" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        control={form.control}
-                        name="price"
-                    />
-                    <FormField
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Category</FormLabel>
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger className="w-full md:w-1/2 h-14">
-                                        <SelectValue placeholder="Select A Category" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {categories?.map((category, i) => {
-                                            if (category.categoryName)
-                                                return (
-                                                    <SelectItem
-                                                        key={i}
-                                                        value={
-                                                            category.categoryName && category.categoryName
-                                                        }
-                                                    >
-                                                        {category.categoryName}
-                                                    </SelectItem>
-                                                );
-                                            else return null;
-                                        })}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        control={form.control}
-                        name="category"
-                    />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(submit)} className="space-y-4">
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Service Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="EG: Plumbing" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="name"
+            />
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Service Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="EG: Plumbing Repair" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="title"
+            />
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <ReactQuill theme="snow" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="description"
+            />
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Extra Info</FormLabel>
+                  <FormControl>
+                    <Input placeholder="হাজিরা প্রতিদিন... " {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="extra_info"
+            />
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input placeholder="120" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="price"
+            />
+            <FormField
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full md:w-1/2 h-14">
+                      <SelectValue placeholder="Select A Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories?.map((category, i) => {
+                        if (category.categoryName)
+                          return (
+                            <SelectItem
+                              key={i}
+                              value={
+                                category.categoryName && category.categoryName
+                              }
+                            >
+                              {category.categoryName}
+                            </SelectItem>
+                          );
+                        else return null;
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="category"
+            />
 
-                    <FormField
-                        render={() => (
-                            <FormItem>
-                                <FormLabel>Service Thumbnail</FormLabel>
-                                <FormDescription>Image Upto 2MB</FormDescription>
-                                <FormControl>
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                    />
-                                </FormControl>
-                                {data ? (
-                                    <div>
-                                        <h2>Current Thumbnail</h2>
-                                        <img
-                                            className="w-20"
-                                            src={data.thumbnail}
-                                            alt="Thumbnail"
-                                        />
-                                    </div>
-                                ) : (
-                                    ""
-                                )}
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        control={form.control}
-                        name="thumbnail"
+            <FormField
+              render={() => (
+                <FormItem>
+                  <FormLabel>Service Thumbnail</FormLabel>
+                  <FormDescription>Image Upto 2MB</FormDescription>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
                     />
-                    <Button>{data ? "Update" : "Save"}</Button>
-                </form>
-            </Form>
+                  </FormControl>
+                  {data ? (
+                    <div>
+                      <h2>Current Thumbnail</h2>
+                      <img
+                        className="w-20"
+                        src={data.thumbnail}
+                        alt="Thumbnail"
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+              control={form.control}
+              name="thumbnail"
+            />
+            <Button>{data ? "Update" : "Save"}</Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
